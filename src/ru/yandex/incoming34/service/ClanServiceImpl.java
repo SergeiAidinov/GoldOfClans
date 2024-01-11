@@ -54,9 +54,7 @@ public class ClanServiceImpl implements ClanService, Runnable {
 				Command command = commands.poll();
 				if (command.getClass().equals(GoldDeltaCommand.class)) {
 					handleGoldDelta(command);
-					continue;
-				}
-				if (command.getClass().equals(GoldRequestCommand.class)) {
+				} else if (command.getClass().equals(GoldRequestCommand.class)) {
 					requestGold(command);
 				}
 			}
