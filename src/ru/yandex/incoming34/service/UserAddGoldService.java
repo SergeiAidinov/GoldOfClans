@@ -2,7 +2,7 @@ package ru.yandex.incoming34.service;
 
 import java.util.Random;
 
-import ru.yandex.incoming34.dto.Delta;
+import ru.yandex.incoming34.dto.GoldDeltaCommand;
 
 public class UserAddGoldService extends Thread {
 
@@ -26,7 +26,7 @@ public class UserAddGoldService extends Thread {
 	}
 
 	public void addGoldToClan(long userId, long clanId, int gold) {
-		clanService.addDelta(new Delta(userId, clanId, gold));
+		clanService.addCommand(new GoldDeltaCommand(userId, clanId, gold));
 	}
 
 }
