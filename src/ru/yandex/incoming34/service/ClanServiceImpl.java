@@ -1,6 +1,7 @@
 package ru.yandex.incoming34.service;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 
@@ -14,8 +15,17 @@ public class ClanServiceImpl implements ClanService, Runnable {
 	private ConcurrentLinkedQueue<Delta> deltas = new ConcurrentLinkedQueue<Delta>();
 	private final HashMap<Long, Clan> clans;
 
-	public ClanServiceImpl(HashMap<Long, Clan> clans) {
+	private ClanServiceImpl(HashMap<Long, Clan> clans) {
 		this.clans = clans;
+	}
+
+	public static ClanServiceImpl instance(HashMap<Long, Clan> clans) {
+		ClanServiceImpl clanServiceImplInstance = null;
+		if (Objects.isNull(clanServiceImplInstance)) {
+			clanServiceImplInstance = new ClanServiceImpl(clans);
+			return clanServiceImplInstance;
+		}
+		return clanServiceImplInstance;
 	}
 
 	@Override
