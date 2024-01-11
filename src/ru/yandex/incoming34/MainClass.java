@@ -13,6 +13,8 @@ public class MainClass {
 
 	public static final int CLANS_QUANTITY = 3;
 	public static final int MAX_CONTRIBUTION = 100;
+	public static final int USER_SLEEP = 10;
+	public static final int QUESTOR_SLEEP = 20;
 	private static final int USERS_QUANTITY = 100;
 	private static final int QUESTORS_QUANTITY = 20;
 	public static DataService dataService = DataService.instance();

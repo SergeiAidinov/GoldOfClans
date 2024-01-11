@@ -50,8 +50,8 @@ public class ClanServiceImpl implements ClanService, Runnable {
 	private void handleCommands() {
 		while (true) {
 			if (!commands.isEmpty()) {
+				System.out.println("Заданий в очереди: " + commands.size());
 				Command command = commands.poll();
-				System.out.println(commands.size());
 				if (command.getClass().equals(GoldDeltaCommand.class)) {
 					handleGoldDelta(command);
 					continue;
@@ -78,8 +78,8 @@ public class ClanServiceImpl implements ClanService, Runnable {
 				+ " сумму " + delta.getGoldDelta());
 		System.out.println(
 				"У клана " + delta.getClanId() + " было " + clans.get(delta.getClanId()).getGold() + " золота");
-		System.out.println("Пользователь " + delta.getUserId() + " добавил к золоту клана " + delta.getClanId()
-				+ " сумму " + delta.getGoldDelta());
+		System.out.println("Пользователь " + delta.getUserId() + " изменил количесвто золота у клана "
+				+ delta.getClanId() + " на сумму " + delta.getGoldDelta());
 		clans.get(delta.getClanId()).addOrTakeGold(delta.getGoldDelta());
 		System.out.println("Новое значение золота: " + clans.get(delta.getClanId()).getGold());
 	}

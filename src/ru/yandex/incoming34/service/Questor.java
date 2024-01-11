@@ -31,7 +31,7 @@ public class Questor implements Runnable {
 			clanService.addCommand(goldRequest);
 			placedRequests.add(requestId);
 			try {
-				Thread.sleep(50);
+				Thread.sleep(MainClass.QUESTOR_SLEEP);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

@@ -21,7 +21,7 @@ public class UserGoldService extends Thread {
 			addGoldToClan(userId, Long.valueOf(random.nextLong(0, MainClass.CLANS_QUANTITY)),
 					random.nextInt(MainClass.MAX_CONTRIBUTION) - MainClass.MAX_CONTRIBUTION / 3);
 			try {
-				sleep(10);
+				sleep(MainClass.USER_SLEEP);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
