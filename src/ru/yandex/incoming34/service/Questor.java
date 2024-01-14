@@ -30,7 +30,7 @@ public class Questor implements Runnable {
 			UUID requestId = UUID.randomUUID();
 			GoldRequestCommand goldRequest = new GoldRequestCommand(requestId,
 					random.nextLong(0, MainClass.CLANS_QUANTITY));
-			dataService.getCommands().add(goldRequest);
+			dataService.getCommands(goldRequest);
 			placedRequests.add(requestId);
 			try {
 				Thread.sleep(MainClass.QUESTOR_SLEEP);

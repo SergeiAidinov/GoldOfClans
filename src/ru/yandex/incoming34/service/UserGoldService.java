@@ -30,7 +30,7 @@ public class UserGoldService extends Thread {
 	}
 
 	public void addGoldToClan(long userId, long clanId, int gold) {
-		dataService.getCommands().add(new GoldDeltaCommand(userId, clanId, gold));
+		dataService.getCommands(new GoldDeltaCommand(userId, clanId, gold));
 	}
 
 }

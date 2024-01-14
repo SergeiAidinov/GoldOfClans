@@ -2,6 +2,7 @@ package ru.yandex.incoming34.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 
 import ru.yandex.incoming34.dto.Command;
@@ -10,7 +11,7 @@ import ru.yandex.incoming34.dto.GoldRequestCommand;
 
 public class CommandProcessor implements Runnable {
 
-	java.util.logging.Logger log = java.util.logging.Logger.getLogger(ClanServiceImpl.class.getName());
+	java.util.logging.Logger log = java.util.logging.Logger.getLogger(CommandProcessor.class.getName());
 
 	private final List<Command> commandList;
 	private final DataService dataService;
@@ -18,11 +19,12 @@ public class CommandProcessor implements Runnable {
 	public CommandProcessor(List<Command> commandList, DataService dataService) {
 		this.commandList = commandList;
 		this.dataService = dataService;
-		System.out.println("===> " + commandList.size());
 	}
 
 	private void processCommand() {
 		for (Command command : commandList) {
+			if (Objects.isNull(command))
+				continue;
 			if (command.getClass().equals(GoldDeltaCommand.class)) {
 				handleGoldDelta(command);
 			} else if (command.getClass().equals(GoldRequestCommand.class)) {

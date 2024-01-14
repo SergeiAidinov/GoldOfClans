@@ -1,6 +1,7 @@
 package ru.yandex.incoming34.service;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,17 +16,17 @@ import ru.yandex.incoming34.dto.Response;
  */
 public class DataService {
 
-	private final HashMap<Long, Clan> clans;
+	private final ConcurrentHashMap<Long, Clan> clans;
 	private final static ConcurrentLinkedQueue<Command> commands = new ConcurrentLinkedQueue<Command>();
 	private final static ConcurrentHashMap<UUID, Response> answers = new ConcurrentHashMap<>();
 	private static DataService dataServiceInsnance = null;
 
-	private DataService(HashMap<Long, Clan> clans) {
+	private DataService(ConcurrentHashMap<Long, Clan> clans) {
 		this.clans = clans;
 
 	}
 
-	public static DataService instance(HashMap<Long, Clan> clans) {
+	public static DataService instance(ConcurrentHashMap<Long, Clan> clans) {
 		if (Objects.isNull(dataServiceInsnance)) {
 			dataServiceInsnance = new DataService(clans);
 		}
@@ -36,12 +37,21 @@ public class DataService {
 		return answers;
 	}
 
-	public HashMap<Long, Clan> getClans() {
+	public ConcurrentHashMap<Long, Clan> getClans() {
 		return clans;
 	}
 
-	public ConcurrentLinkedQueue<Command> getCommands() {
-		return commands;
+	public void getCommands(Command command) {
+		int limit = commands.size();
+		if (limit >= 1024) {
+			List<Command> commandList = new ArrayList<>();
+			for (int i = 0; i < limit; i++)
+				commandList.add(commands.poll());
+			// commands.stream().limit(limit).toList(); //
+			// commands.removeAll(commandList);
+			new Thread(new CommandProcessor(commandList, this)).start();
+		}
+		commands.add(command);
 	}
 
 	/*
