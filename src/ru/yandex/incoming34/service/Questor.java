@@ -11,12 +11,11 @@ import ru.yandex.incoming34.dto.GoldRequestCommand;
 
 public class Questor implements Runnable {
 
-	// private final ClanService clanService;
-	private final DataService dataService;
+	private final GamePlayService dataService;
 	private final Random random = new Random();
 	private final List<UUID> placedRequests = new ArrayList<>();
 
-	public Questor(DataService dataService) {
+	public Questor(GamePlayService dataService) {
 		this.dataService = dataService;
 	}
 
@@ -30,7 +29,7 @@ public class Questor implements Runnable {
 			UUID requestId = UUID.randomUUID();
 			GoldRequestCommand goldRequest = new GoldRequestCommand(requestId,
 					random.nextLong(0, MainClass.CLANS_QUANTITY));
-			dataService.getCommands(goldRequest);
+			dataService.acceptCommand(goldRequest);
 			placedRequests.add(requestId);
 			try {
 				Thread.sleep(MainClass.QUESTOR_SLEEP);

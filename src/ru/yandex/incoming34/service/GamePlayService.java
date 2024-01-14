@@ -7,30 +7,28 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import ru.yandex.incoming34.MainClass;
 import ru.yandex.incoming34.dto.Clan;
 import ru.yandex.incoming34.dto.Command;
 import ru.yandex.incoming34.dto.Response;
 
-/**
- * 
- */
-public class DataService {
+public class GamePlayService {
 
 	private final ConcurrentHashMap<Long, Clan> clans;
 	private final static ConcurrentLinkedQueue<Command> commands = new ConcurrentLinkedQueue<Command>();
 	private final static ConcurrentHashMap<UUID, Response> answers = new ConcurrentHashMap<>();
-	private static DataService dataServiceInsnance = null;
+	private static GamePlayService gamePlayServiceInsnance = null;
 
-	private DataService(ConcurrentHashMap<Long, Clan> clans) {
+	private GamePlayService(ConcurrentHashMap<Long, Clan> clans) {
 		this.clans = clans;
 
 	}
 
-	public static DataService instance(ConcurrentHashMap<Long, Clan> clans) {
-		if (Objects.isNull(dataServiceInsnance)) {
-			dataServiceInsnance = new DataService(clans);
+	public static GamePlayService instance(ConcurrentHashMap<Long, Clan> clans) {
+		if (Objects.isNull(gamePlayServiceInsnance)) {
+			gamePlayServiceInsnance = new GamePlayService(clans);
 		}
-		return dataServiceInsnance;
+		return gamePlayServiceInsnance;
 	}
 
 	public ConcurrentHashMap<UUID, Response> getAnswers() {
@@ -41,28 +39,17 @@ public class DataService {
 		return clans;
 	}
 
-	public void getCommands(Command command) {
+	public void acceptCommand(Command command) {
 		int limit = commands.size();
-		if (limit >= 1024) {
+		if (limit >= MainClass.COMMANDS_PER_THREAD) {
 			List<Command> commandList = new ArrayList<>();
 			for (int i = 0; i < limit; i++)
 				commandList.add(commands.poll());
-			// commands.stream().limit(limit).toList(); //
-			// commands.removeAll(commandList);
 			new Thread(new CommandProcessor(commandList, this)).start();
 		}
 		commands.add(command);
-	}
+		System.out.println("===> " + commands.size());
 
-	/*
-	 * public void requestGold(Command command) { GoldRequestCommand goldRequest =
-	 * (GoldRequestCommand) command; int gold =
-	 * clans.get(goldRequest.getClanId()).getGold(); LocalDateTime localDateTime =
-	 * LocalDateTime.now(); GoldResponce goldResponce = new
-	 * GoldResponce(goldRequest.getClanId(), localDateTime, gold);
-	 * answers.put(goldRequest.getRequestId(), goldResponce);
-	 * 
-	 * }
-	 */
+	}
 
 }

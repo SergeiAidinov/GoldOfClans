@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import ru.yandex.incoming34.dto.Clan;
-import ru.yandex.incoming34.service.DataService;
+import ru.yandex.incoming34.service.GamePlayService;
 import ru.yandex.incoming34.service.Questor;
 import ru.yandex.incoming34.service.UserGoldService;
 
@@ -17,21 +17,17 @@ public class MainClass {
 	public static final int QUESTOR_SLEEP = 0;
 	private static final int USERS_QUANTITY = 100;
 	private static final int QUESTORS_QUANTITY = 100;
-	// public static DataService dataService;
 
 	public static void main(String[] args) {
 
-		DataService dataService = DataService.instance(new ConcurrentHashMap<Long, Clan>(
+		GamePlayService gamePlayService = GamePlayService.instance(new ConcurrentHashMap<Long, Clan>(
 				Map.of(0L, new Clan("Dwarves", 100), 1L, new Clan("Elves", 20), 2L, new Clan("Humans", 50))));
 
 		for (int i = 0; i < USERS_QUANTITY; i++) {
-			UserGoldService userAddGoldService = new UserGoldService(dataService, i);
-			Thread thread = new Thread(userAddGoldService);
-			thread.start();
+			new Thread(new UserGoldService(gamePlayService, i)).start();
 		}
 		for (int i = 0; i < QUESTORS_QUANTITY; i++) {
-			Thread requestThread = new Thread(new Questor(dataService));
-			requestThread.start();
+			new Thread(new Questor(gamePlayService)).start();
 		}
 	}
 }

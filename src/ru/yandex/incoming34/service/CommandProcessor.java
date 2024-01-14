@@ -3,7 +3,6 @@ package ru.yandex.incoming34.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 
 import ru.yandex.incoming34.dto.Command;
 import ru.yandex.incoming34.dto.GoldDeltaCommand;
@@ -14,9 +13,9 @@ public class CommandProcessor implements Runnable {
 	java.util.logging.Logger log = java.util.logging.Logger.getLogger(CommandProcessor.class.getName());
 
 	private final List<Command> commandList;
-	private final DataService dataService;
+	private final GamePlayService dataService;
 
-	public CommandProcessor(List<Command> commandList, DataService dataService) {
+	public CommandProcessor(List<Command> commandList, GamePlayService dataService) {
 		this.commandList = commandList;
 		this.dataService = dataService;
 	}
@@ -44,13 +43,19 @@ public class CommandProcessor implements Runnable {
 
 	private void handleGoldDelta(Command command) {
 		GoldDeltaCommand delta = (GoldDeltaCommand) command;
-		log.log(Level.ALL, "Пользователь " + delta.getUserId() + " добавил к золоту клана " + delta.getClanId()
-				+ " сумму " + delta.getGoldDelta());
+
+		/*
+		 * log.log(Level.ALL, "Пользователь " + delta.getUserId() +
+		 * " добавил к золоту клана " + delta.getClanId() + " сумму " +
+		 * delta.getGoldDelta());
+		 */
 		System.out.println("У клана " + delta.getClanId() + " было "
 				+ dataService.getClans().get(delta.getClanId()).getGold() + " золота");
 		System.out.println("Пользователь " + delta.getUserId() + " изменил количесвто золота у клана "
 				+ delta.getClanId() + " на сумму " + delta.getGoldDelta());
+
 		dataService.getClans().get(delta.getClanId()).addOrTakeGold(delta.getGoldDelta());
+
 		System.out.println("Новое значение золота: " + dataService.getClans().get(delta.getClanId()).getGold());
 	}
 
