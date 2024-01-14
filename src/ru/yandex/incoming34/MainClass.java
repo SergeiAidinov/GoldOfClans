@@ -13,15 +13,15 @@ public class MainClass {
 
 	public static final int CLANS_QUANTITY = 3;
 	public static final int MAX_CONTRIBUTION = 100;
-	public static final int USER_SLEEP = 10;
-	public static final int QUESTOR_SLEEP = 20;
-	private static final int USERS_QUANTITY = 100;
-	private static final int QUESTORS_QUANTITY = 20;
-	public static DataService dataService;
+	public static final int USER_SLEEP = 0;
+	public static final int QUESTOR_SLEEP = 0;
+	private static final int USERS_QUANTITY = 10;
+	private static final int QUESTORS_QUANTITY = 10;
+	// public static DataService dataService;
 
 	public static void main(String[] args) {
 
-		dataService = DataService.instance(new HashMap<Long, Clan>(
+		DataService dataService = DataService.instance(new HashMap<Long, Clan>(
 				Map.of(0L, new Clan("Dwarves", 100), 1L, new Clan("Elves", 20), 2L, new Clan("Humans", 50))));
 
 		final ClanServiceImpl clanService = ClanServiceImpl.instance(dataService);
@@ -34,7 +34,7 @@ public class MainClass {
 			thread.start();
 		}
 		for (int i = 0; i < QUESTORS_QUANTITY; i++) {
-			Thread requestThread = new Thread(new Questor(clanService));
+			Thread requestThread = new Thread(new Questor(dataService));
 			requestThread.start();
 		}
 	}

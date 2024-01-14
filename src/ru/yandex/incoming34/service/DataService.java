@@ -44,4 +44,15 @@ public class DataService {
 		return commands;
 	}
 
+	/*
+	 * public void requestGold(Command command) { GoldRequestCommand goldRequest =
+	 * (GoldRequestCommand) command; int gold =
+	 * clans.get(goldRequest.getClanId()).getGold(); LocalDateTime localDateTime =
+	 * LocalDateTime.now(); GoldResponce goldResponce = new
+	 * GoldResponce(goldRequest.getClanId(), localDateTime, gold);
+	 * answers.put(goldRequest.getRequestId(), goldResponce);
+	 * 
+	 * }
+	 */
+
 }

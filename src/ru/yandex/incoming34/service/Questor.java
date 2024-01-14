@@ -11,12 +11,13 @@ import ru.yandex.incoming34.dto.GoldRequestCommand;
 
 public class Questor implements Runnable {
 
-	private final ClanService clanService;
+	// private final ClanService clanService;
+	private final DataService dataService;
 	private final Random random = new Random();
 	private final List<UUID> placedRequests = new ArrayList<>();
 
-	public Questor(ClanServiceImpl clanService2) {
-		this.clanService = clanService2;
+	public Questor(DataService dataService) {
+		this.dataService = dataService;
 	}
 
 	@Override
@@ -27,8 +28,9 @@ public class Questor implements Runnable {
 	private void requestInfo() {
 		while (true) {
 			UUID requestId = UUID.randomUUID();
-			GoldRequestCommand goldRequest = new GoldRequestCommand(requestId, random.nextLong(0, 3));
-			clanService.addCommand(goldRequest);
+			GoldRequestCommand goldRequest = new GoldRequestCommand(requestId,
+					random.nextLong(0, MainClass.CLANS_QUANTITY));
+			dataService.getCommands().add(goldRequest);
 			placedRequests.add(requestId);
 			try {
 				Thread.sleep(MainClass.QUESTOR_SLEEP);
@@ -37,11 +39,12 @@ public class Questor implements Runnable {
 			}
 			final List<UUID> handledUuids = new ArrayList<>();
 			for (UUID uuid : placedRequests) {
-				GoldResponce goldResponce = (GoldResponce) MainClass.dataService.getAnswers().get(uuid);
+				GoldResponce goldResponce = (GoldResponce) dataService.getAnswers().get(uuid);
 				if (Objects.nonNull(goldResponce)) {
 					System.out.println("По стостоянию на " + goldResponce.getLocalDateTime() + " у клана "
 							+ goldResponce.getClanId() + " было " + goldResponce.getGold() + " золота.");
 					handledUuids.add(uuid);
+					dataService.getAnswers().remove(uuid);
 				}
 			}
 

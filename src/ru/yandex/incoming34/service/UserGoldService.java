@@ -24,7 +24,6 @@ public class UserGoldService extends Thread {
 			try {
 				sleep(MainClass.USER_SLEEP);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
