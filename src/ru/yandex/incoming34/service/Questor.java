@@ -15,8 +15,8 @@ public class Questor implements Runnable {
 	private final Random random = new Random();
 	private final List<UUID> placedRequests = new ArrayList<>();
 
-	public Questor(ClanService clanService) {
-		this.clanService = clanService;
+	public Questor(ClanServiceImpl clanService2) {
+		this.clanService = clanService2;
 	}
 
 	@Override

@@ -7,12 +7,13 @@ import ru.yandex.incoming34.dto.GoldDeltaCommand;
 
 public class UserGoldService extends Thread {
 
-	private final ClanService clanService;
+	// private final ClanService clanService;
+	private final DataService dataService;
 	private final Random random = new Random();
 	private final long userId;
 
-	public UserGoldService(ClanService clanService, long userId) {
-		this.clanService = clanService;
+	public UserGoldService(DataService dataService, long userId) {
+		this.dataService = dataService;
 		this.userId = userId;
 	}
 
@@ -30,7 +31,7 @@ public class UserGoldService extends Thread {
 	}
 
 	public void addGoldToClan(long userId, long clanId, int gold) {
-		clanService.addCommand(new GoldDeltaCommand(userId, clanId, gold));
+		dataService.getCommands().add(new GoldDeltaCommand(userId, clanId, gold));
 	}
 
 }

@@ -1,9 +1,7 @@
 package ru.yandex.incoming34.service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 
 import ru.yandex.incoming34.MainClass;
@@ -16,31 +14,32 @@ public class ClanServiceImpl implements ClanService, Runnable {
 
 	java.util.logging.Logger log = java.util.logging.Logger.getLogger(ClanServiceImpl.class.getName());
 
-	private ConcurrentLinkedQueue<Command> commands = new ConcurrentLinkedQueue<Command>();
-	private final HashMap<Long, Clan> clans;
+	/*
+	 * private ConcurrentLinkedQueue<Command> commands = new
+	 * ConcurrentLinkedQueue<Command>(); private final HashMap<Long, Clan> clans;
+	 */
 
-	private ClanServiceImpl(HashMap<Long, Clan> clans) {
-		this.clans = clans;
+	private final DataService dataService;
+
+	private ClanServiceImpl(DataService dataService) {
+		this.dataService = dataService;
 	}
 
-	public static ClanServiceImpl instance(HashMap<Long, Clan> clans) {
+	public static ClanServiceImpl instance(DataService dataService) {
 		ClanServiceImpl clanServiceImplInstance = null;
 		if (Objects.isNull(clanServiceImplInstance)) {
-			clanServiceImplInstance = new ClanServiceImpl(clans);
+			clanServiceImplInstance = new ClanServiceImpl(dataService);
 			return clanServiceImplInstance;
 		}
 		return clanServiceImplInstance;
 	}
 
-	@Override
-	public Clan getClan(long clanId) {
-		return clans.get(clanId);
-	}
-
-	@Override
-	public boolean addCommand(Command command) {
-		return commands.offer(command);
-	}
+	/*
+	 * @Override public Clan getClan(long clanId) { return clans.get(clanId); }
+	 * 
+	 * @Override public boolean addCommand(Command command) { return
+	 * commands.offer(command); }
+	 */
 
 	public void run() {
 		System.out.println("The Game commences...");
@@ -49,9 +48,9 @@ public class ClanServiceImpl implements ClanService, Runnable {
 
 	private void handleCommands() {
 		while (true) {
-			if (!commands.isEmpty()) {
-				System.out.println("Заданий в очереди: " + commands.size());
-				Command command = commands.poll();
+			if (!dataService.getCommands().isEmpty()) {
+				System.out.println("Заданий в очереди: " + dataService.getCommands().size());
+				Command command = dataService.getCommands().poll();
 				if (command.getClass().equals(GoldDeltaCommand.class)) {
 					handleGoldDelta(command);
 				} else if (command.getClass().equals(GoldRequestCommand.class)) {
@@ -63,7 +62,7 @@ public class ClanServiceImpl implements ClanService, Runnable {
 
 	private void requestGold(Command command) {
 		GoldRequestCommand goldRequest = (GoldRequestCommand) command;
-		int gold = clans.get(goldRequest.getClanId()).getGold();
+		int gold = dataService.getClans().get(goldRequest.getClanId()).getGold();
 		LocalDateTime localDateTime = LocalDateTime.now();
 		GoldResponce goldResponce = new GoldResponce(goldRequest.getClanId(), localDateTime, gold);
 		MainClass.dataService.getAnswers().put(goldRequest.getRequestId(), goldResponce);
@@ -74,11 +73,23 @@ public class ClanServiceImpl implements ClanService, Runnable {
 		GoldDeltaCommand delta = (GoldDeltaCommand) command;
 		log.log(Level.ALL, "Пользователь " + delta.getUserId() + " добавил к золоту клана " + delta.getClanId()
 				+ " сумму " + delta.getGoldDelta());
-		System.out.println(
-				"У клана " + delta.getClanId() + " было " + clans.get(delta.getClanId()).getGold() + " золота");
+		System.out.println("У клана " + delta.getClanId() + " было "
+				+ dataService.getClans().get(delta.getClanId()).getGold() + " золота");
 		System.out.println("Пользователь " + delta.getUserId() + " изменил количесвто золота у клана "
 				+ delta.getClanId() + " на сумму " + delta.getGoldDelta());
-		clans.get(delta.getClanId()).addOrTakeGold(delta.getGoldDelta());
-		System.out.println("Новое значение золота: " + clans.get(delta.getClanId()).getGold());
+		dataService.getClans().get(delta.getClanId()).addOrTakeGold(delta.getGoldDelta());
+		System.out.println("Новое значение золота: " + dataService.getClans().get(delta.getClanId()).getGold());
+	}
+
+	@Override
+	public Clan getClan(long clanId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean addCommand(Command command) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

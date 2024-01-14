@@ -17,16 +17,19 @@ public class MainClass {
 	public static final int QUESTOR_SLEEP = 20;
 	private static final int USERS_QUANTITY = 100;
 	private static final int QUESTORS_QUANTITY = 20;
-	public static DataService dataService = DataService.instance();
+	public static DataService dataService;
 
 	public static void main(String[] args) {
-		final ClanServiceImpl clanService = ClanServiceImpl.instance(new HashMap<Long, Clan>(
+
+		dataService = DataService.instance(new HashMap<Long, Clan>(
 				Map.of(0L, new Clan("Dwarves", 100), 1L, new Clan("Elves", 20), 2L, new Clan("Humans", 50))));
+
+		final ClanServiceImpl clanService = ClanServiceImpl.instance(dataService);
 		Thread clanServiceThread = new Thread(clanService);
 		clanServiceThread.start();
 
 		for (int i = 0; i < USERS_QUANTITY; i++) {
-			UserGoldService userAddGoldService = new UserGoldService(clanService, i);
+			UserGoldService userAddGoldService = new UserGoldService(dataService, i);
 			Thread thread = new Thread(userAddGoldService);
 			thread.start();
 		}
