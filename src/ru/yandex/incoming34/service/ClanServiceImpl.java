@@ -1,5 +1,6 @@
 package ru.yandex.incoming34.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,10 +45,17 @@ public class ClanServiceImpl implements ClanService, Runnable {
 
 	private void handleCommands() {
 		while (true) {
+			// System.out.println();
 			if (!dataService.getCommands().isEmpty()) {
 				int limit = dataService.getCommands().size();
-				List<Command> commandList = dataService.getCommands().stream().limit(limit).toList();
 				System.out.println("Заданий в очереди: " + dataService.getCommands().size());
+
+				List<Command> commandList = new ArrayList<>();
+				for (int i = 0; i < limit; i++)
+					commandList.add(dataService.getCommands().poll());
+
+				// List<Command> commandList =
+				// dataService.getCommands().stream().limit(limit).toList();
 				// dataService.getCommands().removeAll(commandList);
 				new Thread(new CommandProcessor(commandList, dataService)).start();
 			}
