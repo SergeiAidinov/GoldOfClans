@@ -41,15 +41,13 @@ public class GamePlayService {
 
 	public void acceptCommand(Command command) {
 		int limit = commands.size();
-		if (limit >= MainClass.COMMANDS_PER_THREAD) {
+		if (limit >= MainClass.MIN_COMMANDS_PER_THREAD) {
 			List<Command> commandList = new ArrayList<>();
 			for (int i = 0; i < limit; i++)
 				commandList.add(commands.poll());
 			new Thread(new CommandProcessor(commandList, this)).start();
 		}
 		commands.add(command);
-		System.out.println("===> " + commands.size());
-
 	}
 
 }

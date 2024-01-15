@@ -12,7 +12,7 @@ public class MainClass {
 
 	public static final int CLANS_QUANTITY = 3;
 	public static final int MAX_CONTRIBUTION = 100;
-	public static final int COMMANDS_PER_THREAD = (int) Math.pow(2, 10);
+	public static final int MIN_COMMANDS_PER_THREAD = (int) Math.pow(2, 10);
 	public static final int USER_SLEEP = 0;
 	public static final int QUESTOR_SLEEP = 0;
 	private static final int USERS_QUANTITY = 100;

@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import ru.yandex.incoming34.MainClass;
 import ru.yandex.incoming34.dto.GoldRequestCommand;
+import ru.yandex.incoming34.dto.GoldResponse;
 
 public class Questor implements Runnable {
 
@@ -38,7 +39,7 @@ public class Questor implements Runnable {
 			}
 			final List<UUID> handledUuids = new ArrayList<>();
 			for (UUID uuid : placedRequests) {
-				GoldResponce goldResponce = (GoldResponce) dataService.getAnswers().get(uuid);
+				GoldResponse goldResponce = (GoldResponse) dataService.getAnswers().get(uuid);
 				if (Objects.nonNull(goldResponce)) {
 					System.out.println("По стостоянию на " + goldResponce.getLocalDateTime() + " у клана "
 							+ goldResponce.getClanId() + " было " + goldResponce.getGold() + " золота.");

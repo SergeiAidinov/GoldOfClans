@@ -7,10 +7,9 @@ import java.util.Objects;
 import ru.yandex.incoming34.dto.Command;
 import ru.yandex.incoming34.dto.GoldDeltaCommand;
 import ru.yandex.incoming34.dto.GoldRequestCommand;
+import ru.yandex.incoming34.dto.GoldResponse;
 
 public class CommandProcessor implements Runnable {
-
-	java.util.logging.Logger log = java.util.logging.Logger.getLogger(CommandProcessor.class.getName());
 
 	private final List<Command> commandList;
 	private final GamePlayService dataService;
@@ -36,19 +35,13 @@ public class CommandProcessor implements Runnable {
 		GoldRequestCommand goldRequest = (GoldRequestCommand) command;
 		int gold = dataService.getClans().get(goldRequest.getClanId()).getGold();
 		LocalDateTime localDateTime = LocalDateTime.now();
-		GoldResponce goldResponce = new GoldResponce(goldRequest.getClanId(), localDateTime, gold);
+		GoldResponse goldResponce = new GoldResponse(goldRequest.getClanId(), localDateTime, gold);
 		dataService.getAnswers().put(goldRequest.getRequestId(), goldResponce);
 
 	}
 
 	private void handleGoldDelta(Command command) {
 		GoldDeltaCommand delta = (GoldDeltaCommand) command;
-
-		/*
-		 * log.log(Level.ALL, "Пользователь " + delta.getUserId() +
-		 * " добавил к золоту клана " + delta.getClanId() + " сумму " +
-		 * delta.getGoldDelta());
-		 */
 		System.out.println("У клана " + delta.getClanId() + " было "
 				+ dataService.getClans().get(delta.getClanId()).getGold() + " золота");
 		System.out.println("Пользователь " + delta.getUserId() + " изменил количесвто золота у клана "
