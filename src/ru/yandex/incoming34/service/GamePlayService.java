@@ -1,8 +1,6 @@
 package ru.yandex.incoming34.service;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,12 +39,9 @@ public class GamePlayService {
 			commands.add(command);
 			int limit = commands.size();
 			if (limit >= MainClass.MIN_COMMANDS_PER_THREAD) {
-				List<Command> commandList = new ArrayList<>();
-				for (int i = 0; i < limit; i++)
-					commandList.add(commands.poll());
-				new Thread(new CommandProcessor(commandList, this)).start();
+				new Thread(new CommandProcessor(commands.stream().toList(), this)).start();
+				commands.clear();
 			}
-
 		} finally {
 			lock.unlock();
 		}
