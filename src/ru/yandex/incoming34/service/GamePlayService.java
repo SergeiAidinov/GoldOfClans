@@ -37,8 +37,7 @@ public class GamePlayService {
 		lock.lock();
 		try {
 			commands.add(command);
-			int limit = commands.size();
-			if (limit >= MainClass.MIN_COMMANDS_PER_THREAD) {
+			if (commands.size() >= MainClass.MIN_COMMANDS_PER_THREAD) {
 				new Thread(new CommandProcessor(commands.stream().toList(), this)).start();
 				commands.clear();
 			}
