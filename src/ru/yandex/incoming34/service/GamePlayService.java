@@ -1,10 +1,11 @@
 package ru.yandex.incoming34.service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -15,7 +16,7 @@ import ru.yandex.incoming34.dto.Command;
 public class GamePlayService {
 
 	private final ConcurrentHashMap<Long, Clan> clans;
-	private final static ConcurrentLinkedQueue<Command> commands = new ConcurrentLinkedQueue<Command>();
+	private final Queue<Command> commands = new LinkedList<>();
 	private static GamePlayService gamePlayServiceInsnance = null;
 	Lock lock = new ReentrantLock(true);
 
