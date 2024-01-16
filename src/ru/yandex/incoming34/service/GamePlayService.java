@@ -16,7 +16,7 @@ public class GamePlayService {
 	private final ConcurrentHashMap<Long, Clan> clans;
 	private final Queue<Command> commands = new LinkedList<>();
 	private static GamePlayService gamePlayServiceInsnance = null;
-	Lock lock = new ReentrantLock(true);
+	private final Lock lock = new ReentrantLock(true);
 
 	private GamePlayService(ConcurrentHashMap<Long, Clan> clans) {
 		this.clans = clans;
