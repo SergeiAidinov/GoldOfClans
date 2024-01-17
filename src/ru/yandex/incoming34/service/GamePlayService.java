@@ -8,8 +8,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import ru.yandex.incoming34.MainClass;
-import ru.yandex.incoming34.dto.Clan;
 import ru.yandex.incoming34.dto.Command;
+import ru.yandex.incoming34.structure.Clan;
 
 public class GamePlayService {
 

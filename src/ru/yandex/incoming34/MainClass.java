@@ -3,9 +3,9 @@ package ru.yandex.incoming34;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ru.yandex.incoming34.dto.Clan;
 import ru.yandex.incoming34.service.GamePlayService;
 import ru.yandex.incoming34.service.UserGoldService;
+import ru.yandex.incoming34.structure.Clan;
 
 public class MainClass {
 
