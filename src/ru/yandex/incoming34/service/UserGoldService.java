@@ -1,5 +1,6 @@
 package ru.yandex.incoming34.service;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
 import ru.yandex.incoming34.MainClass;
@@ -18,7 +19,7 @@ public class UserGoldService extends Thread {
 
 	public void run() {
 		while (true) {
-			GoldDeltaCommand goldDeltaCommand = new GoldDeltaCommand(userId,
+			GoldDeltaCommand goldDeltaCommand = new GoldDeltaCommand(userId, LocalDateTime.now(),
 					Long.valueOf(random.nextLong(0, MainClass.CLANS_QUANTITY)),
 					random.nextInt(MainClass.MAX_CONTRIBUTION) - MainClass.MAX_CONTRIBUTION / 3);
 			gamePlayService.acceptCommand(goldDeltaCommand);

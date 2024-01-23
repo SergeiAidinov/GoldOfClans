@@ -1,12 +1,12 @@
 package ru.yandex.incoming34.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 import ru.yandex.incoming34.dto.Command;
 import ru.yandex.incoming34.dto.GoldDeltaCommand;
+import ru.yandex.incoming34.dto.GoldDeltaResult;
 
 public class CommandProcessor implements Runnable {
 
@@ -32,15 +32,15 @@ public class CommandProcessor implements Runnable {
 
 	private void handleGoldDelta(Command command) {
 		GoldDeltaCommand delta = (GoldDeltaCommand) command;
-
-		stringBuilder.append("У клана " + delta.getClanId() + " было "
-				+ gamePlayService.getClans().get(delta.getClanId()).getGold() + " золота. ");
-		stringBuilder.append(LocalDateTime.now() + " Пользователь " + delta.getUserId()
+		GoldDeltaResult goldDeltaResult = gamePlayService.getClans().get(delta.getClanId())
+				.addOrTakeGold(delta.getGoldDelta());
+		stringBuilder.append("Обрабатывается команда " + command.getClass().getCanonicalName() + ", поступившая "
+				+ command.getCommandDateTime());
+		stringBuilder.append(
+				" РЕЗУЛЬТАТ: У клана " + delta.getClanId() + " было " + goldDeltaResult.getOldValue() + " золота. ");
+		stringBuilder.append(goldDeltaResult.getOperationDateTime() + " Пользователь " + delta.getUserId()
 				+ " изменил количесвто золота у клана " + delta.getClanId() + " на сумму " + delta.getGoldDelta());
-
-		gamePlayService.getClans().get(delta.getClanId()).addOrTakeGold(delta.getGoldDelta());
-
-		stringBuilder.append(". Новое значение золота: " + gamePlayService.getClans().get(delta.getClanId()).getGold());
+		stringBuilder.append(". Новое значение золота: " + goldDeltaResult.getNewValue());
 		LOGGER.info(stringBuilder.toString());
 		stringBuilder.setLength(0);
 	}

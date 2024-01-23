@@ -1,4 +1,8 @@
-package ru.yandex.incoming34.dto;
+package ru.yandex.incoming34.structure;
+
+import java.time.LocalDateTime;
+
+import ru.yandex.incoming34.dto.GoldDeltaResult;
 
 public class Clan {
 
@@ -14,8 +18,10 @@ public class Clan {
 		return name;
 	}
 
-	public void addOrTakeGold(int delta) {
+	public GoldDeltaResult addOrTakeGold(int delta) {
+		int oldValue = gold;
 		gold = getGold() + delta;
+		return new GoldDeltaResult(oldValue, gold, LocalDateTime.now());
 	}
 
 	public int getGold() {
